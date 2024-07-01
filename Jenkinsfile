@@ -73,14 +73,13 @@ pipeline {
 
         stage('Promote') {
             steps {
-                // Merge con la rama master
+                // Checkout y merge con la rama master
                 script {
-                    // Asumiendo que ya estamos en la rama de develop
-                    sh '''
-                        git checkout master
-                        git merge --no-ff develop -m "Merge develop into master for release"
-                        git push origin master
-                    '''
+                    // Asegurarse de tener la rama develop localmente
+                    sh 'git fetch origin develop:develop'
+                    sh 'git checkout master'
+                    sh 'git merge --no-ff develop -m "Merge develop into master for release"'
+                    sh 'git push origin master'
                 }
             }
         }
