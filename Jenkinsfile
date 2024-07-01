@@ -37,29 +37,18 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                script {
-                    // Construir, validar y desplegar usando AWS SAM
-                    sh 'sam build'
-                    sh 'sam validate'
-                    sh 'sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name my-stack --capabilities CAPABILITY_IAM'
-                }
-            }
-        }
-
         stage('Deplo') {
             steps {
                 script {
                     def already_deployed = sh(script: '''
-                        aws cloudformation describe-stacks --stack-name todo-list-aws-production --region us-east-1
+                        aws cloudformation describe-stacks --stack-name todo-list-aws --region us-east-1
                     ''', returnStatus: true)
 
                     if (already_deployed != 0) {
                         sh '''
                             sam build
                             sam validate --config-file samconfig.toml --region us-east-1
-                            sam deploy --stack-name todo-list-aws-production --capabilities "CAPABILITY_IAM" --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-nqyfysup146y --s3-prefix todo-list-aws --region us-east-1 --parameter-overrides Stage="production"
+                            sam deploy --stack-name todo-list-aws --capabilities "CAPABILITY_IAM" --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-ox3ehbwe02gi --s3-prefix todo-list-aws --region us-east-1 --parameter-overrides Stage="staging"
                         '''
                     }
                 }
