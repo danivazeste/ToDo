@@ -54,5 +54,21 @@ pipeline {
                 }
             }
         }
+
+        stage('Rest Test') {
+            steps {
+                script {
+                    try {
+                        // Ejecutar pruebas de integración con curl o pytest
+                        dir('test/integration') {
+                            sh 'pytest todoApiTest.py'
+                        }
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
+                }
+            }
+        }
 }
 }
