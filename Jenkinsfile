@@ -4,7 +4,7 @@ pipeline {
         stage('Get Code') {
             steps {
                 // Obtener código del repositorio
-                git 'https://github.com/danivazeste/hellounir.git'
+                git 'https://github.com/danivazeste/ToDo.git'
             }
         }
 
