@@ -72,24 +72,18 @@ pipeline {
         }
 
         stage('Promote') {
-    when {
-        expression {
-            // Ejecutar la etapa solo si todas las etapas anteriores han tenido éxito
-            return currentBuild.result == 'SUCCESS'
+            steps {
+                // Merge con la rama master
+                script {
+                    // Asumiendo que ya estamos en la rama de develop
+                    sh '''
+                        git checkout master
+                        git merge --no-ff develop -m "Merge develop into master for release"
+                        git push origin master
+                    '''
+                }
+            }
         }
-    }
-    steps {
-        // Merge con la rama master
-        script {
-            // Asumiendo que ya estamos en la rama de develop
-            sh '''
-                git checkout master
-                git merge --no-ff develop -m "Merge develop into master for release"
-                git push origin master
-            '''
-        }
-    }
-}
 
 }
 }
