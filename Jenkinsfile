@@ -82,6 +82,7 @@ pipeline {
                         sh 'git merge --no-ff develop -m "Merge develop into master for release"'
                         sh 'git push https://${GIT_TOKEN}@github.com/danivazeste/ToDo.git master'
                     }
+                    }
                 }
             }
         }
